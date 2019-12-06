@@ -26,6 +26,29 @@ export default class Portfolio extends React.Component {
         this.state = this.props.stocks.length === 0 ? { selected: 'add' } : { selected: 'stocks' }
     }
 
+    parseStocks = (stocks) => {
+        const exchange = this.props.currency === 0 ? 1 : 1.11
+        return stocks.map(s => ({
+            ...s,
+            value: formatNumber(s.value * exchange),
+            purchase: formatNumber(s.purchase * exchange)
+        }))
+    }
+
+    getPortfolioValue = () => formatNumber(
+        this.props.stocks.map(s => s.value).reduce((a, b) => a + b, 0) * (this.props.currency === 0 ? 1 : 1.11)
+    )
+
+    parseNewStock = ({ name, quantity, purchase, value }) => {
+        if (this.props.stocks.find(s => s.name === name) !== undefined) {
+            this.props.setStockError(this.props.portfolioId, 1)
+        } else {
+            this.props.addStock(this.props.portfolioId, name, quantity, purchase, value)
+            this.setState({ selected: 'stocks' })
+            this.props.setStockError(this.props.portfolioId, 0)
+        }
+    }
+
     getTabContent() {
         if (this.state.selected === 'stocks') {
             return (
@@ -43,27 +66,18 @@ export default class Portfolio extends React.Component {
                 </TableWithBrowserPagination>
             );
         } else {
-            return (<AddStock addStock={({ name, quantity, purchase, value }) => {
-                if (this.props.stocks.find(s => s.name === name) !== undefined) {
-                    this.props.setStockError(this.props.portfolioId, 1)
-                } else {
-                    this.props.addStock(this.props.portfolioId, name, quantity, purchase, value)
-                    this.setState({ selected: 'stocks' })
-                    this.props.setStockError(this.props.portfolioId, 0)
-                }
-            }} />);
+            return (<AddStock addStock={newStock => this.parseNewStock(newStock)} />);
         }
     }
 
-    parseStocks = (stocks) => this.props.currency === 0 ? stocks : stocks.map(s => ({
-        ...s,
-        value: formatNumber(s.value * 1.11),
-        purchase: formatNumber(s.purchase * 1.1)
-    }))
-
-    getPortfolioValue = () => formatNumber(
-        this.props.stocks.map(s => s.value).reduce((a, b) => a + b, 0) * (this.props.currency === 0 ? 1 : 1.11)
-    )
+    computeErrorMessage = () => {
+        switch (this.props.stockError) {
+            case 1:
+                return 'Entry with that name already exists'
+            default:
+                return ''
+        }
+    }
 
     render() {
         return (
@@ -112,9 +126,10 @@ export default class Portfolio extends React.Component {
                     <div className='rainbow-flex rainbow-justify_center'>
                         <Notification
                             title='Cannot save'
-                            description='Entry with that name already exists'
+                            description={this.computeErrorMessage()}
                             icon='error'
                             className='rainbow-m-bottom_medium'
+                            onRequestClose={() => this.props.setStockError(this.props.portfolioId, 0)}
                         />
                     </div>
                 }
@@ -131,7 +146,7 @@ Portfolio.propTypes = {
         PropTypes.shape({
             name: PropTypes.string.isRequired,
             quantity: PropTypes.number.isRequired,
-            purchase: PropTypes.string.isRequired,
+            purchase: PropTypes.number.isRequired,
             value: PropTypes.number.isRequired,
         }).isRequired
     ).isRequired,
