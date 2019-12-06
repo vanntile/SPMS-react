@@ -1,0 +1,55 @@
+html, body {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 1em 1em 4em;
+}
+
+ul {
+    overflow-x: hidden!important
+}
+
+.add-portfolio-container {
+    padding: 2rem 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+.add-portfolio {
+    display: flex;
+    max-width: 520px;
+    flex-flow: row wrap;
+    border-radius: 24px;
+}
+
+.add-portfolio_input {
+    flex: 1;
+}
+
+.portfolio-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    gap: 2em;
+    padding-top: 3rem;
+}
+
+.portfolio {
+    width: 100%;
+    max-width: 520px;
+}
+
+.grey {
+    background: #f4f6f9;
+    padding-top: 30px;
+}
+
+.add-stock_header {
+    font-size: 1.25rem;
+    padding: 2rem 0 1rem 1rem;
+}

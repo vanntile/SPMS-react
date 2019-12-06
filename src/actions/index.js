@@ -32,6 +32,12 @@ export const removeStock = (portfolioId, name) => ({
     name
 })
 
+export const setStockError = (portfolioId, error) => ({
+    type: ActionTypes.stockError,
+    portfolioId,
+    error
+})
+
 export const ActionTypes = {
     addPortfolio: 'ADD_PORTFOLIO',
     removePortfolio: 'REMOVE_PORTFOLIO',
