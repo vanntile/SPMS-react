@@ -34,7 +34,6 @@ export const portfolios = (state = [], action) => {
         case AT.addStock:
             return state.map(p => (p.portfolioId === action.portfolioId ? {
                 ...copyPort(p),
-                currency: 1 - p.currency,
                 stocks: [...p.stocks, {
                     name: action.name,
                     quantity: action.quantity,
@@ -45,13 +44,12 @@ export const portfolios = (state = [], action) => {
         case AT.removeStock:
             return state.map(p => (p.portfolioId === action.portfolioId ? {
                 ...copyPort(p),
-                currency: 1 - p.currency,
                 stocks: [...p.stocks.filter(s => s.name !== action.name)]
             } : copyPort(p)))
         case AT.stockError:
             return state.map(p => (p.portfolioId === action.portfolioId ? {
                 ...copyPort(p),
-                stockError: 1 - p.stockError
+                stockError: action.error
             } : copyPort(p)))
         default:
             return state
