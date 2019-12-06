@@ -1,9 +1,15 @@
 import React from 'react'
+import { fetchPurchasePrice } from '../data'
 import {
     Button,
-    Input
+    Input,
+    DatePicker
 } from 'react-rainbow-components';
 
+
+const dateToString = date => `${date.getFullYear()}${
+    date.getMonth() < 9 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)
+    }${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`
 
 export default class AddStock extends React.Component {
     constructor(props) {
@@ -11,8 +17,7 @@ export default class AddStock extends React.Component {
         this.state = {
             name: '',
             quantity: 0,
-            purchase: '',
-            value: 0
+            date: new Date()
         }
     }
 
@@ -23,10 +28,12 @@ export default class AddStock extends React.Component {
     }
 
     save() {
-        let { name, quantity, purchase, value } = this.state;
-        quantity = parseInt(quantity);
-        value = quantity * 1; // TODO: * value of a share at purchase
-        this.props.addStock({ name, quantity, purchase, value });
+        let { name, quantity, date } = this.state;
+        name = name.toUpperCase()
+        quantity = parseInt(quantity)
+        fetchPurchasePrice(name, dateToString(date)).then(({ purchase, value }) => {
+            this.props.addStock({ name, quantity, purchase: purchase * quantity, value: value * quantity });
+        })
     }
 
     render() {
@@ -48,12 +55,10 @@ export default class AddStock extends React.Component {
                 onChange={(e) => this.sync(e)}
                 className='rainbow-p-horizontal_medium rainbow-p-vertical_x-small'
             />
-            <Input
+            <DatePicker
                 label='Purchase'
-                placeholder='21/04/2014'
-                type='text'
-                name='purchase'
-                onChange={(e) => this.sync(e)}
+                value={this.state.date}
+                onChange={value => this.setState({ date: value })}
                 className='rainbow-p-horizontal_medium rainbow-p-vertical_x-small'
             />
             <Button
