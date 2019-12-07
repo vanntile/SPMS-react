@@ -20,7 +20,7 @@ const TOKEN = 'Tpk_ebebf134daff4baea4b35a1a8ba75c42'
     }]
     */
 
-const LATEST_PRICE = `https://sandbox.iexapis.com/stable/stock/{STOCK}/quote/latestPrice?token=${TOKEN}`
+// const LATEST_PRICE = `https://sandbox.iexapis.com/stable/stock/{STOCK}/quote/latestPrice?token=${TOKEN}`
 
 // batch smth like this
 // https://sandbox.iexapis.com/stable/stock/market/batch?symbols=aapl,fb&types=quote,chart&range=1m&last=5&token=Tpk_ebebf134daff4baea4b35a1a8ba75c42
@@ -28,6 +28,6 @@ const LATEST_PRICE = `https://sandbox.iexapis.com/stable/stock/{STOCK}/quote/lat
 export const fetchPurchasePrice = async (stock, date) => {
     const url = `https://sandbox.iexapis.com/stable/stock/${stock}/batch?types=quote,chart&filter=latestPrice&exactDate=${date}&chartByDay=true&token=${TOKEN}`
     const res = await fetch(url)
-    const { quote: { latestPrice }, chart } = await res.json();
-    return { purchase: (chart[0].high + chart[0].low) / 2, value: latestPrice };
+    const { quote: { latestPrice }, chart } = await res.json()
+    return { purchase: (chart[0].high + chart[0].low) / 2, value: latestPrice }
 }

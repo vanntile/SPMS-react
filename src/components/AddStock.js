@@ -1,10 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { fetchPurchasePrice } from '../data'
+
 import {
     Button,
     Input,
     DatePicker
-} from 'react-rainbow-components';
+} from 'react-rainbow-components'
 
 
 const dateToString = date => `${date.getFullYear()}${
@@ -17,7 +19,7 @@ export default class AddStock extends React.Component {
         this.state = {
             name: '',
             quantity: 0,
-            date: new Date()
+            date: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
         }
     }
 
@@ -28,11 +30,11 @@ export default class AddStock extends React.Component {
     }
 
     save() {
-        let { name, quantity, date } = this.state;
+        let { name, quantity, date } = this.state
         name = name.toUpperCase()
         quantity = parseInt(quantity)
         fetchPurchasePrice(name, dateToString(date)).then(({ purchase, value }) => {
-            this.props.addStock({ name, quantity, purchase: purchase * quantity, value: value * quantity });
+            this.props.addStock({ name, quantity, purchase: purchase * quantity, value: value * quantity })
         })
     }
 
@@ -69,4 +71,8 @@ export default class AddStock extends React.Component {
             />
         </div >)
     }
+}
+
+AddStock.propTypes = {
+    addStock: PropTypes.func.isRequired,
 }
