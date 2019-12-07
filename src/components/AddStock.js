@@ -33,9 +33,18 @@ export default class AddStock extends React.Component {
         let { name, quantity, date } = this.state
         name = name.toUpperCase()
         quantity = parseInt(quantity)
-        fetchPurchasePrice(name, dateToString(date)).then(({ purchase, value }) => {
-            this.props.addStock({ name, quantity, purchase: purchase * quantity, value: value * quantity })
-        })
+        console.log(quantity)
+        if (name.length === 0 || quantity === 0 || isNaN(quantity)) {
+            this.props.addStock({ name: NaN, quantity: NaN, purchase: NaN, value: NaN })
+        } else if (quantity < 0) {
+            this.props.addStock({ name, quantity: NaN, purchase: NaN, value: NaN })
+        } else {
+            fetchPurchasePrice(name, dateToString(date)).then(({ purchase, value }) => {
+                this.props.addStock({ name, quantity, purchase: purchase * quantity, value: value * quantity })
+            }).catch(err => {
+                this.props.addStock({ name: null, quantity: NaN, purchase: NaN, value: NaN })
+            })
+        }
     }
 
     render() {
