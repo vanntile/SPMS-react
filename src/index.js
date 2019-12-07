@@ -7,6 +7,7 @@ import rootReducer from './reducers'
 import { Application } from 'react-rainbow-components'
 import AddPortfolio from './components/AddPortfolio'
 import PortfolioList from './components/PortfolioList'
+import RefreshStocks from './components/RefreshStocks'
 
 const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {}
 const store = createStore(rootReducer, persistedState)
@@ -20,6 +21,7 @@ render(
         <Application>
             <div className='rainbow-flex rainbow-justify_center rainbow-p-top_large'>
                 <h1 className='rainbow-font-size-heading_x-large title'>SPSM App</h1>
+                <RefreshStocks />
             </div>
             <AddPortfolio />
             <PortfolioList />

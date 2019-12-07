@@ -52,6 +52,14 @@ export const portfolios = (state = [], action) => {
                 ...copyPort(p),
                 stockError: action.error
             } : copyPort(p)))
+        case AT.updateStocks:
+            return state.map(p => ({
+                ...copyPort(p),
+                stocks: p.stocks.map(s => ({
+                    ...s,
+                    value: s.quantity * action.latestQuotes[s.name].quote.latestPrice
+                }))
+            }))
         default:
             return state
     }
