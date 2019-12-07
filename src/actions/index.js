@@ -8,8 +8,9 @@ export const removePortfolio = portfolioId => ({
     portfolioId
 })
 
-export const togglePortfolioError = () => ({
-    type: ActionTypes.PortfolioErr
+export const setPortfolioError = error => ({
+    type: ActionTypes.portfolioError,
+    error
 })
 
 export const toggleCurrency = portfolioId => ({
@@ -41,7 +42,7 @@ export const setStockError = (portfolioId, error) => ({
 export const ActionTypes = {
     addPortfolio: 'ADD_PORTFOLIO',
     removePortfolio: 'REMOVE_PORTFOLIO',
-    portfolioErr: 'PORTFOLIO_ERR',
+    portfolioError: 'PORTFOLIO_ERR',
     toggleCurrency: 'TOGGLE_CURRENCY',
     addStock: 'ADD_STOCK',
     removeStock: 'REMOVE_STOCK',
