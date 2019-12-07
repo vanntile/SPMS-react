@@ -64,9 +64,9 @@ export default class Portfolio extends React.Component {
                         />
                     </Column>
                 </TableWithBrowserPagination>
-            );
+            )
         } else {
-            return (<AddStock addStock={newStock => this.parseNewStock(newStock)} />);
+            return (<AddStock addStock={newStock => this.parseNewStock(newStock)} />)
         }
     }
 
