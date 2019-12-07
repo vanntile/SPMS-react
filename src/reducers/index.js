@@ -3,10 +3,10 @@ import { ActionTypes as AT } from '../actions'
 
 const copyPort = p => ({ ...p, stocks: p.stocks.map(s => ({ ...s })) })
 
-export const portfolioErr = (state = 0, action) => {
+export const portfolioError = (state = 0, action) => {
     switch (action.type) {
-        case AT.portfolioErr:
-            return (1 - state)
+        case AT.portfolioError:
+            return action.error
         default:
             return state
     }
@@ -58,6 +58,6 @@ export const portfolios = (state = [], action) => {
 }
 
 export default combineReducers({
-    portfolioErr,
+    portfolioError,
     portfolios
 })
