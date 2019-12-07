@@ -39,6 +39,11 @@ export const setStockError = (portfolioId, error) => ({
     error
 })
 
+export const updateStocks = latestQuotes => ({
+    type: ActionTypes.updateStocks,
+    latestQuotes
+})
+
 export const ActionTypes = {
     addPortfolio: 'ADD_PORTFOLIO',
     removePortfolio: 'REMOVE_PORTFOLIO',
@@ -46,5 +51,6 @@ export const ActionTypes = {
     toggleCurrency: 'TOGGLE_CURRENCY',
     addStock: 'ADD_STOCK',
     removeStock: 'REMOVE_STOCK',
-    stockError: 'STOCK_ERR'
+    stockError: 'STOCK_ERR',
+    updateStocks: 'UPDATE_STOCKS'
 }
