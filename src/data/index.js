@@ -29,5 +29,6 @@ export const fetchPurchasePrice = async (stock, date) => {
     const url = `https://sandbox.iexapis.com/stable/stock/${stock}/batch?types=quote,chart&filter=latestPrice&exactDate=${date}&chartByDay=true&token=${TOKEN}`
     const res = await fetch(url)
     const { quote: { latestPrice }, chart } = await res.json()
-    return { purchase: (chart[0].high + chart[0].low) / 2, value: latestPrice }
+    const purchase = chart.length > 0 ? (chart[0].high + chart[0].low) / 2 : NaN
+    return { purchase, value: latestPrice }
 }

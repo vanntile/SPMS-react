@@ -40,8 +40,16 @@ export default class Portfolio extends React.Component {
     )
 
     parseNewStock = ({ name, quantity, purchase, value }) => {
-        if (this.props.stocks.find(s => s.name === name) !== undefined) {
+        if (name === null) {
+            this.props.setStockError(this.props.portfolioId, 4)
+        } else if (isNaN(name)) {
+            this.props.setStockError(this.props.portfolioId, 5)
+        } else if (isNaN(quantity)) {
             this.props.setStockError(this.props.portfolioId, 1)
+        } else if (isNaN(purchase)) {
+            this.props.setStockError(this.props.portfolioId, 2)
+        } else if (this.props.stocks.find(s => s.name === name) !== undefined) {
+            this.props.setStockError(this.props.portfolioId, 3)
         } else {
             this.props.addStock(this.props.portfolioId, name, quantity, purchase, value)
             this.setState({ selected: 'stocks' })
@@ -73,7 +81,15 @@ export default class Portfolio extends React.Component {
     computeErrorMessage = () => {
         switch (this.props.stockError) {
             case 1:
+                return 'Quantity cannot be negative'
+            case 2:
+                return 'There is no historical data for weekends or holidays'
+            case 3:
                 return 'Entry with that name already exists'
+            case 4:
+                return 'Unknown symbol name'
+            case 5:
+                return 'All fields are required'
             default:
                 return ''
         }
