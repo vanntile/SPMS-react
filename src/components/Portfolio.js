@@ -19,8 +19,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDollarSign, faEuroSign } from '@fortawesome/free-solid-svg-icons'
 
+// helper function to parse numbers to 2-decimal floats
 const formatNumber = n => parseInt(n * 100) / 100
 
+/*
+ * The Portfolio presentational component joins all the needed styled components to a quality UX,
+ * allowing to see shares, add stocks, check the portfolio evolution and change the currency
+ */
 export default class Portfolio extends React.Component {
     constructor(props) {
         super(props)
@@ -30,6 +35,7 @@ export default class Portfolio extends React.Component {
         }
     }
 
+    // format number values for simple display taking currency into account
     parseStocks = (stocks) => {
         const exchange = this.props.currency === 0 ? 1 : 1.11
         return stocks.map(s => ({
@@ -39,10 +45,13 @@ export default class Portfolio extends React.Component {
         }))
     }
 
+    // calculate currency-aware portfolio value
     getPortfolioValue = () => formatNumber(
         this.props.stocks.map(s => s.value).reduce((a, b) => a + b, 0) * (this.props.currency === 0 ? 1 : 1.11)
     )
 
+    // Function sent to an AddStock component that consumes error check
+    // signals or sends an action to the store
     parseNewStock = ({ name, quantity, purchase, value }) => {
         if (name === null) {
             this.props.setStockError(this.props.portfolioId, 1)
@@ -61,9 +70,11 @@ export default class Portfolio extends React.Component {
         }
     }
 
+    // render the displayed tab content considering the selected tab
     getTabContent() {
         if (this.state.selected === 'stocks') {
             return (
+                // stock list as a table with pages
                 <TableWithBrowserPagination pageSize={5} data={this.parseStocks(this.props.stocks)} keyField='name'>
                     <Column header='Stock' field='name' />
                     <Column header='Quantity' field='quantity' />
@@ -78,10 +89,12 @@ export default class Portfolio extends React.Component {
                 </TableWithBrowserPagination>
             )
         } else {
+            // AddStock form
             return (<AddStock addStock={newStock => this.parseNewStock(newStock)} />)
         }
     }
 
+    // helper functions holding stock add error messages
     computeErrorMessage = () => {
         switch (this.props.stockError) {
             case 1:
@@ -99,12 +112,15 @@ export default class Portfolio extends React.Component {
         }
     }
 
+    // switch the visibility of the graph
     toggleGraph = () => (this.setState({ graph_visible: !this.state.graph_visible }))
 
     render() {
         return (
             <Card
+                // portfolio name
                 title={this.props.portfolioId}
+                // chip holding the total portfolio value and a delete button
                 actions={<span>
                     <Chip className='rainbow-m-horizontal_medium' label={
                         <span>
@@ -122,6 +138,7 @@ export default class Portfolio extends React.Component {
                         onClick={() => this.props.removePortfolio(this.props.portfolioId)}
                     />
                 </span>}
+                // currency switch and performance graph button
                 footer={
                     <div className='rainbow-flex rainbow-justify_spread'>
                         <CheckboxToggle
@@ -148,6 +165,7 @@ export default class Portfolio extends React.Component {
                     <Tab name='add' label={<span>Add Stock</span>} />
                 </Tabset>
                 {this.getTabContent()}
+                {/* display stock adding errors */}
                 {this.props.stockError === 0 ? '' :
                     <div className='rainbow-flex rainbow-justify_center'>
                         <Notification
@@ -159,16 +177,19 @@ export default class Portfolio extends React.Component {
                         />
                     </div>
                 }
+                {/* display perormance graph modal */}
                 {this.state.graph_visible ? <Graph
                     toggleGraph={() => this.toggleGraph()}
                     portfolioId={this.props.portfolioId}
                     symbols={this.props.stocks.map(s => s.name).join(',')}
+                    currency={this.props.currency}
                 /> : ''}
             </Card >
         )
     }
 }
 
+// Development mode type properties that are required
 Portfolio.propTypes = {
     portfolioId: PropTypes.string.isRequired,
     currency: PropTypes.number.isRequired,

@@ -1,3 +1,5 @@
+// This module contains action generators and an enum-type object to define action names
+
 export const addPortfolio = portfolioId => ({
     type: ActionTypes.addPortfolio,
     portfolioId

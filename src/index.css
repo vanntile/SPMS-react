@@ -1,3 +1,8 @@
+/*
+ * Basic styles for the SPSM app. The portfolios are responsive with
+ * flex and without media queries
+ */
+
 html, body {
     width: 100vw;
     min-height: 100vh;

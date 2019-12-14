@@ -1,5 +1,9 @@
+// constants
 const TOKEN = 'Tpk_ebebf134daff4baea4b35a1a8ba75c42'
 const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
+
+/* The exported functions in the current module return promises to
+ * the data wanted: purchase price, latest quotes, chart data */
 
 export const fetchPurchasePrice = async (stock, date) => {
     const url = `https://sandbox.iexapis.com/stable/stock/${stock}/batch?types=quote,chart&filter=latestPrice&exactDate=${date}&chartByDay=true&token=${TOKEN}`
