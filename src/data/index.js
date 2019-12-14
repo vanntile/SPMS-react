@@ -1,4 +1,5 @@
 const TOKEN = 'Tpk_ebebf134daff4baea4b35a1a8ba75c42'
+const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
 
 export const fetchPurchasePrice = async (stock, date) => {
     const url = `https://sandbox.iexapis.com/stable/stock/${stock}/batch?types=quote,chart&filter=latestPrice&exactDate=${date}&chartByDay=true&token=${TOKEN}`
@@ -13,4 +14,31 @@ export const fetchLatestQuotes = async (symbols) => {
     const res = await fetch(url)
     const latestQuotes = await res.json()
     return latestQuotes
+}
+
+const countDays = (firstDate, secondDate) => Math.round(Math.abs((firstDate - secondDate) / oneDay))
+
+const getRange = (days) => {
+    if (days < 30) {
+        return '1m'
+    } else if (days < 90) {
+        return '3m'
+    } else if (days < 270) {
+        return '6m'
+    } else if (days < 366) {
+        return '1y'
+    } else if (days < 730) {
+        return '2y'
+    } else {
+        return '5y'
+    }
+}
+
+export const fetchChartData = async (symbols, start) => {
+    const range = getRange(countDays(start, new Date()))
+    const url = `https://sandbox.iexapis.com/stable/stock/market/batch?symbols=${symbols}&types=chart&range=${range}&chartByDay=True&filter=close,date&token=${TOKEN}`
+    const res = await fetch(url)
+    const chart = await res.json()
+
+    return chart
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import '../index.css'
 
 import AddStock from './AddStock'
+import Graph from './Graph'
 import {
     TableWithBrowserPagination,
     Column,
@@ -13,7 +14,7 @@ import {
     Tab,
     Chip,
     CheckboxToggle,
-    Notification
+    Notification,
 } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDollarSign, faEuroSign } from '@fortawesome/free-solid-svg-icons'
@@ -23,7 +24,10 @@ const formatNumber = n => parseInt(n * 100) / 100
 export default class Portfolio extends React.Component {
     constructor(props) {
         super(props)
-        this.state = this.props.stocks.length === 0 ? { selected: 'add' } : { selected: 'stocks' }
+        this.state = {
+            selected: this.props.stocks.length === 0 ? 'add' : 'stocks',
+            graph_visible: false
+        }
     }
 
     parseStocks = (stocks) => {
@@ -95,6 +99,8 @@ export default class Portfolio extends React.Component {
         }
     }
 
+    toggleGraph = () => (this.setState({ graph_visible: !this.state.graph_visible }))
+
     render() {
         return (
             <Card
@@ -123,7 +129,11 @@ export default class Portfolio extends React.Component {
                             value={this.props.currency !== 0}
                             onChange={() => this.props.toggleCurrency(this.props.portfolioId)}
                         />
-                        <Button variant='outline-brand' label='Plot performance' />
+                        <Button
+                            variant='outline-brand'
+                            label='Plot performance'
+                            onClick={() => this.toggleGraph()}
+                        />
                     </div>
                 }
                 className='portfolio'
@@ -149,6 +159,11 @@ export default class Portfolio extends React.Component {
                         />
                     </div>
                 }
+                {this.state.graph_visible ? <Graph
+                    toggleGraph={() => this.toggleGraph()}
+                    portfolioId={this.props.portfolioId}
+                    symbols={this.props.stocks.map(s => s.name).join(',')}
+                /> : ''}
             </Card >
         )
     }
