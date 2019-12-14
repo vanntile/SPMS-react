@@ -9,6 +9,7 @@ import {
     Notification
 } from 'react-rainbow-components'
 
+// The AddPortfolio presentational component displays a form to add a new portfolio
 class AddPortfolio extends React.Component {
     constructor(props) {
         super(props)
@@ -17,20 +18,24 @@ class AddPortfolio extends React.Component {
         }
     }
 
+    // what tot do when hitting the save button
     save(_) {
         if (!this.state.value.trim()) {
             return
         }
 
         if (this.props.portfolios.includes(this.state.value)) {
+            // the current portfolio name already exists
             this.props.setPortfolioError(1)
         } else {
             this.props.addPortfolio(this.state.value)
+            // reset the input form
             this.setState({ value: '' })
             this.props.setPortfolioError(0)
         }
     }
 
+    // Render an input form to create a new portfolio, with a error check notification
     render() {
         return (
             <div className='add-portfolio-container'>
@@ -59,6 +64,7 @@ class AddPortfolio extends React.Component {
     }
 }
 
+// Development mode type properties that are required
 AddPortfolio.propTypes = {
     portfolioError: PropTypes.number.isRequired,
     portfolios: PropTypes.array.isRequired,
@@ -66,8 +72,8 @@ AddPortfolio.propTypes = {
     setPortfolioError: PropTypes.func.isRequired,
 }
 
-const getPortfolioError = (state) => state.portfolioError
-const getPortfolioNames = (state) => state.portfolios.map(p => p.portfolioId)
+const getPortfolioError = state => state.portfolioError
+const getPortfolioNames = state => state.portfolios.map(p => p.portfolioId)
 
 const mapStateToProps = state => ({
     portfolioError: getPortfolioError(state),
@@ -79,6 +85,7 @@ const mapDispatchToProps = dispatch => ({
     setPortfolioError: error => dispatch(setPortfolioError(error))
 })
 
+// Connecting mapping props functions to the component
 export default connect(
     mapStateToProps,
     mapDispatchToProps

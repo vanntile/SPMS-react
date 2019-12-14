@@ -6,6 +6,8 @@ import { fetchLatestQuotes } from '../data'
 
 import { Button } from 'react-rainbow-components'
 
+// RefreshStock component receives a single string of symbols from all
+// the portfolios and updates the state by passing the response to an action.
 const RefreshStock = ({ symbols, updateStocks }) => {
     return (
         <Button
@@ -21,11 +23,14 @@ const RefreshStock = ({ symbols, updateStocks }) => {
     )
 }
 
+// Development mode type properties that are required
 RefreshStock.propTypes = {
     symbols: PropTypes.string.isRequired,
     updateStocks: PropTypes.func.isRequired,
 }
 
+// Helper function to get a single instance of each symbol in all portfolios.
+// It reduces stock lists map them to symbol names, filters out duplicates and concatenates to a string
 const getPortfolioSymbols = (state) => state.portfolios.reduce((acc, p) => acc.concat(p.stocks), [])
     .map(s => s.name).filter((value, index, self) => self.indexOf(value) === index).join(',')
 

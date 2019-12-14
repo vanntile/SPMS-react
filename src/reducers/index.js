@@ -1,8 +1,17 @@
 import { combineReducers } from 'redux'
 import { ActionTypes as AT } from '../actions'
 
+// Helper function to deep copy a whole portfolio to a new object
 const copyPort = p => ({ ...p, stocks: p.stocks.map(s => ({ ...s })) })
 
+/*
+ * The reducers are managing the redux store by taking it a state and an action
+ * and getting out the resulting state using the action type.
+ * The action generators are in their own package
+ */
+
+
+// The portfolio error reducer.
 export const portfolioError = (state = 0, action) => {
     switch (action.type) {
         case AT.portfolioError:
@@ -12,6 +21,7 @@ export const portfolioError = (state = 0, action) => {
     }
 }
 
+// The portfolio state errors
 export const portfolios = (state = [], action) => {
     switch (action.type) {
         case AT.addPortfolio:
@@ -65,6 +75,7 @@ export const portfolios = (state = [], action) => {
     }
 }
 
+// The default reducer is the above two reducers combined
 export default combineReducers({
     portfolioError,
     portfolios
