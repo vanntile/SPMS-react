@@ -1,5 +1,5 @@
 // constants
-const TOKEN = 'Tpk_ebebf134daff4baea4b35a1a8ba75c42'
+const TOKEN = `` // TODO: API TOKEN here
 const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
 
 /* The exported functions in the current module return promises to
